@@ -1,5 +1,6 @@
 #include <common/common.h>
 #include <drivers/screen.h>
+#include <libc/stdbool.h>
 #include <libc/stdlib.h>
 #include <libc/string.h>
 #include <shell/command.h>
@@ -25,7 +26,7 @@ void handle_command(commands_t *commands, char *input) {
     }
 
     for (uint32_t i = 0; i < commands->commands_count; i++) {
-        if (strcmp(commands->commands[i].name.data, cmd.data) == 0) {
+        if (strcmp(commands->commands[i].name.data, cmd.data)) {
             if (commands->commands[i].arity == -1) {
                 commands->commands[i].handler(commands, args);
                 return;

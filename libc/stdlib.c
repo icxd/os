@@ -22,3 +22,7 @@ void *malloc(int size) {
     kmalloc(size, 0, &addr);
     return (void *)addr;
 }
+
+void free(void *ptr) {
+    // TODO
+}

@@ -5,5 +5,6 @@
 
 uint32_t kmalloc(int size, int alignment, uint32_t *physical_address);
 void *malloc(int size);
+void free(void *ptr);
 
 #endif // _PLUH_OS__LIBC__STDLIB_H_
