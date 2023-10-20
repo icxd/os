@@ -4,44 +4,18 @@ void __padding__() {}
 #include <cpu/isr.h>
 #include <drivers/screen.h>
 #include <kernel/kernel.h>
+#include <kernel/syscalls.h>
 #include <libc/stdbool.h>
 #include <libc/stdlib.h>
 #include <libc/string.h>
 #include <shell/command.h>
-
-static void cmd_help(commands_t *commands, string *args) {
-    UNUSED(args);
-    kprint("AVAILABLE COMMANDS (");
-    kprint(itoa(commands->commands_count));
-    kprint("):\n");
-    for (int i = 0; i < commands->commands_count; i++) {
-        kprint(" - ");
-        kprint(commands->commands[i].name.data);
-        kprint("\n");
-    }
-}
-
-static void cmd_clear(commands_t *commands, string *args) {
-    UNUSED(commands);
-    UNUSED(args);
-    clear_screen();
-}
-
-static void cmd_echo(commands_t *commands, string *args) {
-    UNUSED(commands);
-    kprint(args->data);
-    kprint("\n");
-}
-
-static void cmd_ls(commands_t *commands, string *args) {
-    UNUSED(commands);
-    UNUSED(args);
-    PANIC("Unimplemented");
-}
+#include <shell/commands.h>
 
 commands_t commands;
 
 void kmain() {
+    register_interrupt_handler(0x80, syscall_handler);
+
     isr_install();
     irq_install();
 
@@ -55,8 +29,27 @@ void kmain() {
     register_command(&commands, SV("ECHO"), -1, cmd_echo);
     register_command(&commands, SV("LS"), 0, cmd_ls);
 
+    set_terminal_color(WHITE_ON_BLACK);
+
     clear_screen();
 
+    // sys$write(1, "Hello, kernel World!\n", 21);
+
+    // asm("hlt");
+
+    kprint("\n");
+    set_terminal_color(FOREGROUND(COLOR_LIGHT_RED));
+    kprint("   _____ __    _____ _____ \n");
+    set_terminal_color(FOREGROUND(COLOR_LIGHT_BROWN));
+    kprint("  |  _  |  |  |  |  |  |  |\n");
+    set_terminal_color(FOREGROUND(COLOR_LIGHT_GREEN));
+    kprint("  |   __|  |__|  |  |     |\n");
+    set_terminal_color(FOREGROUND(COLOR_LIGHT_CYAN));
+    kprint("  |__|  |_____|_____|__|__|\n");
+    set_terminal_color(FOREGROUND(COLOR_LIGHT_BLUE));
+    kprint("                           \n");
+    kprint("\n");
     kprint("WELCOME TO PLUH OS\n\n");
+    set_terminal_color(WHITE_ON_BLACK);
     kprint(">>> ");
 }
