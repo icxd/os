@@ -9,9 +9,6 @@ typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 
-typedef unsigned int size_t;
-typedef int ssize_t;
-
 #define low_16(addr) (uint16_t)((addr) & 0xFFFF)
 #define high_16(addr) (uint16_t)((addr >> 16) & 0xFFFF)
 

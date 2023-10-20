@@ -23,6 +23,4 @@ void *malloc(int size) {
     return (void *)addr;
 }
 
-void free(void *ptr) {
-    // TODO
-}
+void free(void *ptr) { (void)ptr; }
