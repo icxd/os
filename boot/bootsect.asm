@@ -31,13 +31,6 @@ load_kernel:
     mov dl, [BOOT_DRIVE]
     call disk_load
 
-;     mov cx,1000
-; test1:
-;     nop
-;     dec cx
-;     test cx,cx
-;     jnz test1
-
     ret
 
 [bits 32]
