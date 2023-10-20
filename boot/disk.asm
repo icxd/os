@@ -3,10 +3,10 @@ disk_load:
     push dx
 
     mov ah, 0x02
-    mov al, dh
-    mov cl, 0x02
-    mov ch, 0x00
-    mov dh, 0x00
+    mov al, dh      ; number of sectors to read
+    mov cl, 0x02    ; sector number
+    mov ch, 0x00    ; low eight bits of cylinder number
+    mov dh, 0x00    ; head number
 
     int 0x13
     jc disk_error

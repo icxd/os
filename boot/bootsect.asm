@@ -27,8 +27,8 @@ load_kernel:
     call print_nl
 
     mov bx, KERNEL_OFFSET
-    mov dh, 16
-    mov dl, [BOOT_DRIVE]
+    mov dh, 16              ; head number
+    mov dl, [BOOT_DRIVE]    ; drive number
     call disk_load
 
     ret
@@ -37,7 +37,14 @@ load_kernel:
 BEGIN_PM:
     mov ebx, MSG_PROT_MODE
     call print_string_pm
-    call KERNEL_OFFSET
+    
+    ; CF set on error
+    ; if AH = 11h (corrected ECC error), AL = burst length
+    ; CF clear if successful
+    ; AH = status (see #00234)
+    ; AL = number of sectors transferred (only valid if CF set for some BIOSes)
+
+    call KERNEL_OFFSET      ; call kernel
     ; jmp $
 
 BOOT_DRIVE db 0
