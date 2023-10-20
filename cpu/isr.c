@@ -113,20 +113,29 @@ char *exception_messages[] = {"Division By Zero",
 
 void isr_handler(registers_t *r) {
     UNUSED(r);
-    // kprint("received interrupt: ");
-    // char s[3];
-    // int_to_ascii(r.int_no, s);
-    // kprint(s);
-    // kprint("\n");
-    // kprint(exception_messages[r.int_no]);
-    // kprint("\n");
+    // spanic(exception_messages[r->int_no]);
 }
 
 void register_interrupt_handler(uint8_t n, isr_t handler) {
     interrupt_handlers[n] = handler;
 }
 
+static int32_t read_cr2() {
+    int32_t val;
+    asm volatile("mov %%cr2, %0" : "=r"(val));
+    return val;
+}
+
 void irq_handler(registers_t *r) {
+    // set_terminal_color(FOREGROUND(COLOR_LIGHT_BROWN));
+    // kprint("IRQ: ");
+    // set_terminal_color(WHITE_ON_BLACK);
+    // char s[3];
+    // int_to_ascii(r->int_no, s);
+    // kprint(s);
+    // kprint("\n");
+    // set_terminal_color(WHITE_ON_BLACK);
+
     if (r->int_no >= 40)
         port_byte_out(0xA0, 0x20);
     port_byte_out(0x20, 0x20);
@@ -134,6 +143,8 @@ void irq_handler(registers_t *r) {
     if (interrupt_handlers[r->int_no] != 0) {
         isr_t handler = interrupt_handlers[r->int_no];
         handler(r);
+    } else {
+        PANIC("Unhandled interrupt");
     }
 }
 
