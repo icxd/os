@@ -32,15 +32,21 @@ void handle_command(commands_t *commands, char *input) {
                 return;
             }
             if (args == NULL && commands->commands[i].arity != 0) {
+                set_terminal_color(FOREGROUND(COLOR_RED) |
+                                   BACKGROUND(COLOR_BLACK));
                 kprint("INVALID NUMBER OF ARGUMENTS, EXPECTED ");
-                kprint(itoa(commands->commands[i].arity));
+                kprint(sitoa(commands->commands[i].arity));
                 kprint("\n");
+                set_terminal_color(WHITE_ON_BLACK);
                 return;
             }
             if (args != NULL && commands->commands[i].arity != args->size) {
+                set_terminal_color(FOREGROUND(COLOR_RED) |
+                                   BACKGROUND(COLOR_BLACK));
                 kprint("INVALID NUMBER OF ARGUMENTS, EXPECTED ");
-                kprint(itoa(commands->commands[i].arity));
+                kprint(sitoa(commands->commands[i].arity));
                 kprint("\n");
+                set_terminal_color(WHITE_ON_BLACK);
                 return;
             }
             commands->commands[i].handler(commands, args);
@@ -48,7 +54,9 @@ void handle_command(commands_t *commands, char *input) {
         }
     }
 
+    set_terminal_color(FOREGROUND(COLOR_RED) | BACKGROUND(COLOR_BLACK));
     kprint("INVALID COMMAND '");
     kprint(cmd.data);
     kprint("'\n");
+    set_terminal_color(WHITE_ON_BLACK);
 }
