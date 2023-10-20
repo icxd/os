@@ -7,7 +7,7 @@ OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 CC = /home/linuxbrew/.linuxbrew/bin/i386-elf-gcc
 GDB = /home/linuxbrew/.linuxbrew/bin/i386-elf-gdb
 # -g: Use debugging symbols in gcc
-CFLAGS = -g -I. -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -Wno-unused-variable -Wno-sign-compare
+CFLAGS = -g -I. -Ilibc -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -Wno-unused-variable -Wno-unused-function -Wno-sign-compare -Wno-int-conversion
 
 # First rule is run by default
 os-image.bin: boot/bootsect.bin kernel.bin
@@ -23,8 +23,7 @@ kernel.elf: boot/kernel_entry.o ${OBJ}
 	/home/linuxbrew/.linuxbrew/bin/i386-elf-ld -o $@ -Ttext 0x1000 $^ 
 
 run: os-image.bin
-# -nographic -d int --no-shutdown --no-reboot -monitor stdio -serial mon:null 
-	qemu-system-i386 -fda os-image.bin
+	qemu-system-i386 -fda os-image.bin -d int --no-shutdown --no-reboot -monitor stdio -serial mon:null 
 
 # Open the connection to qemu and load our kernel-object file with symbols
 debug: os-image.bin kernel.elf
