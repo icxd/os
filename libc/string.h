@@ -17,6 +17,7 @@ void backspace(char s[]);
 void append(char s[], char n);
 int index_of(char *s, char c);
 
-char *itoa(int n);
+char *itoa(int value, char *str, int base);
+char *sitoa(int value);
 
 #endif // _PLUH_OS__LIBC__STRING_H_
