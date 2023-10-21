@@ -32,22 +32,12 @@ uint32_t sys$close(uint32_t fd) {
     return ret;
 }
 
+uint32_t sys$exit(int error_code) {
+    uint32_t ret;
+    asm volatile("int $0x80" : "=a"(ret) : "0"(sc_exit), "b"(error_code));
+    return ret;
+}
+
 void syscall_handler(registers_t *regs) {
     DEBUG("syscall_handler: %d\n", regs->eax);
-    switch (regs->eax) {
-    case sc_read:
-        regs->eax = sys$read(regs->ebx, (char *)regs->ecx, regs->edx);
-        break;
-    case sc_write:
-        regs->eax = sys$write(regs->ebx, (const char *)regs->ecx, regs->edx);
-        break;
-    case sc_open:
-        regs->eax = sys$open((const char *)regs->ebx, regs->ecx, regs->edx);
-        break;
-    case sc_close:
-        regs->eax = sys$close(regs->ebx);
-        break;
-    default:
-        break;
-    }
 }

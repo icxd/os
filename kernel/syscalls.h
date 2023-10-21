@@ -11,7 +11,8 @@ typedef uint16_t umode_t;
     SYSCALL_ENUM(read, 0x00, uint32_t, char *, size_t)                         \
     SYSCALL_ENUM(write, 0x01, uint32_t, const char *, size_t)                  \
     SYSCALL_ENUM(open, 0x02, const char *, int, umode_t)                       \
-    SYSCALL_ENUM(close, 0x03, uint32_t)
+    SYSCALL_ENUM(close, 0x03, uint32_t)                                        \
+    SYSCALL_ENUM(exit, 0x60, int)
 
 #define SYSCALL_ENUM(name, value, ...) sc_##name = value,
 typedef enum { ENUMERATE_SYSCALLS } syscall_t;
