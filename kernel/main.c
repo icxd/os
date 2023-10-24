@@ -2,9 +2,10 @@ void __padding__() {}
 
 #include <common/common.h>
 #include <cpu/isr.h>
+#include <debug/qemu.h>
 #include <drivers/screen.h>
+#include <drivers/syscalls.h>
 #include <kernel/kernel.h>
-#include <kernel/syscalls.h>
 #include <libc/stdbool.h>
 #include <libc/stdlib.h>
 #include <libc/string.h>
@@ -14,7 +15,7 @@ void __padding__() {}
 commands_t commands;
 
 void kmain() {
-    register_interrupt_handler(0x80, syscall_handler);
+    qemu_init_debug();
 
     isr_install();
     irq_install();
@@ -34,8 +35,6 @@ void kmain() {
     clear_screen();
 
     // sys$write(1, "Hello, kernel World!\n", 21);
-
-    // asm("hlt");
 
     kprint("\n");
     set_terminal_color(FOREGROUND(COLOR_LIGHT_RED));
