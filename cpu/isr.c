@@ -5,6 +5,7 @@
 #include <cpu/timer.h>
 #include <drivers/keyboard.h>
 #include <drivers/screen.h>
+#include <drivers/syscalls.h>
 #include <libc/stdint.h>
 #include <libc/string.h>
 
@@ -126,16 +127,16 @@ static int32_t read_cr2() {
     return val;
 }
 
-void irq_handler(registers_t *r) {
-    // set_terminal_color(FOREGROUND(COLOR_LIGHT_BROWN));
-    // kprint("IRQ: ");
-    // set_terminal_color(WHITE_ON_BLACK);
-    // char s[3];
-    // int_to_ascii(r->int_no, s);
-    // kprint(s);
-    // kprint("\n");
-    // set_terminal_color(WHITE_ON_BLACK);
+static void print_register(char *name, uint32_t reg) {
+    kprint(name);
+    kprint(": 0x");
+    char s[256];
+    itoa(reg, s, 16);
+    kprint(s);
+    kprint("\n");
+}
 
+void irq_handler(registers_t *r) {
     if (r->int_no >= 40)
         port_byte_out(0xA0, 0x20);
     port_byte_out(0x20, 0x20);
@@ -152,4 +153,5 @@ void irq_install() {
     asm volatile("sti");
     init_timer(50);
     init_keyboard();
+    init_syscalls();
 }
